@@ -1,5 +1,5 @@
 # HTTP status code exception for "302 Not Found" redirection.
-from webob.exc import HTTPNotFound
+from webob.exc import HTTPFound
 
 
 class Wiki:
