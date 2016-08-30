@@ -1,3 +1,6 @@
+# An easy way to safely combine paths.
+from pathlib import PurePosixPath
+
 # HTTP status code exception for "302 Found" redirection.
 from webob.exc import HTTPFound
 
@@ -11,5 +14,9 @@ class Wiki:
 	
 	def __call__(self):
 		"""Called to handle direct requests to the web root itself."""
-		return HTTPFound(location='/Home')  # Issue the redirect.
+		
+		# Identify where this application is starting from.
+		path = PurePosixPath(self._ctx.path[-1][1])
+		
+		return HTTPFound(location=str(path / 'Home'))  # Issue the redirect.
 
