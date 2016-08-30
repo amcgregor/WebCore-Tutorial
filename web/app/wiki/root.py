@@ -21,7 +21,16 @@ class Wiki:
 	def __getitem__(self, name):
 		"""Load data for the Article with the given name."""
 		
-		return {'name': name}  # We pretend, for now.
+		data = self._ctx.db.articles.find_one({'_id': name})
+		
+		if not data:  # If no record was found, populate some default data.
+			data = {
+					'_id': name,
+					'content': None,
+					'modified': None,
+				}
+		
+		return data
 	
 	def get(self):
 		"""Called to handle direct requests to the web root itself."""

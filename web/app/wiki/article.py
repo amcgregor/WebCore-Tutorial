@@ -9,7 +9,7 @@ class Article:
 		self._page = page  # The data associated with the page we represent.
 	
 	def get(self):
-		return "I'm an article named " + self._page['name']
+		return self._page
 	
 	def post(self, content):
 		"""Update the in-database content for the current article."""
