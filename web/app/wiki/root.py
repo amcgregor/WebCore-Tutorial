@@ -15,7 +15,7 @@ class Wiki:
 	__resource__ = Article  # Declare the type of resource we contain.
 	
 	def __init__(self, context, collection=None, record=None):
-		"""Exeuted when the root of the site (or children) are accessed, on each request."""
+		"""Executed when the root of the site (or children) are accessed, on each request."""
 		self._ctx = context  # Store the "request context" for later use.
 	
 	def __getitem__(self, name):
@@ -26,7 +26,7 @@ class Wiki:
 	def get(self):
 		"""Called to handle direct requests to the web root itself."""
 		
-		# Identify where this application is starting from.
+		# Identify where this wiki is attached.
 		path = PurePosixPath(self._ctx.path[-1][1])
 		
 		return HTTPFound(location=str(path / 'Home'))  # Issue the redirect.
