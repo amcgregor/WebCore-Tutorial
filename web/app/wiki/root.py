@@ -30,4 +30,9 @@ class Wiki:
 		path = PurePosixPath(self._ctx.path[-1][1])
 		
 		return HTTPFound(location=str(path / 'Home'))  # Issue the redirect.
+	
+	def post(self, name, content):
+		"""Save a new article to the database."""
+		
+		return {'ok': True}  # For now, we only pretend.
 
