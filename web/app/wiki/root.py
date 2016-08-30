@@ -1,8 +1,11 @@
-# An easy way to safely combine paths.
-from pathlib import PurePosixPath
+from datetime import datetime  # Python's standard date + time object.
+from pathlib import PurePosixPath  # An easy way to safely combine paths.
 
 # HTTP status code exception for "302 Found" redirection.
 from webob.exc import HTTPFound
+
+# MongoDB exceptions that may be raised when manipulating data.
+from pymongo.errors import DuplicateKeyError
 
 # Get a reference to our Article resource class.
 from .article import Article
@@ -43,5 +46,25 @@ class Wiki:
 	def post(self, name, content):
 		"""Save a new article to the database."""
 		
-		return {'ok': True}  # For now, we only pretend.
+		try:
+			result = self._ctx.db.articles.insert_one({
+					'_id': name,
+					'content': content,
+					'modified': datetime.utcnow(),
+				})
+		
+		except DuplicateKeyError:
+			return {
+					'ok': False,
+					'reason': 'duplicate',
+					'message': "An article with that name already exists.",
+					'name': name,
+				}
+		
+		# All is well, so we inform the client.
+		return {
+				'ok': True,
+				'acknowledged': result.acknowledged,
+				'name': result.inserted_id
+			}
 
