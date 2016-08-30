@@ -16,6 +16,7 @@ class Wiki:
 	
 	__dispatch__ = 'resource'  # The Wiki is a collection of pages, so use resource dispatch.
 	__resource__ = Article  # Declare the type of resource we contain.
+	__collection__ = 'articles'
 	
 	def __init__(self, context, collection=None, record=None):
 		"""Executed when the root of the site (or children) are accessed, on each request."""
@@ -24,7 +25,7 @@ class Wiki:
 	def __getitem__(self, name):
 		"""Load data for the Article with the given name."""
 		
-		data = self._ctx.db.articles.find_one({'_id': name})
+		data = self._ctx.db[self.__collection__].find_one({'_id': name})
 		
 		if not data:  # If no record was found, populate some default data.
 			data = {
@@ -47,7 +48,7 @@ class Wiki:
 		"""Save a new article to the database."""
 		
 		try:
-			result = self._ctx.db.articles.insert_one({
+			result = self._ctx.db[self.__collection__].insert_one({
 					'_id': name,
 					'content': content,
 					'modified': datetime.utcnow(),

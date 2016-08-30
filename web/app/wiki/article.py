@@ -17,7 +17,7 @@ class Article:
 		This will create the article if one by this name doesn't already exist.
 		"""
 		
-		result = self._ctx.db.articles.update_one(
+		result = self._ctx.db[self._wiki.__collection__].update_one(
 				{'_id': self._page['_id']},  # A query identifying the document to update.
 				{  # The following are the MongoDB update operations to apply to the document.
 					'$set': {  # Update the page content.
@@ -41,7 +41,7 @@ class Article:
 	def delete(self):
 		"""Delete this page from the wiki."""
 		
-		result = self._ctx.db.articles.delete_one({'_id': self._page['_id']})
+		result = self._ctx.db[self._wiki.__collection__].delete_one({'_id': self._page['_id']})
 		
 		if not result.deleted_count:  # Nothing was deleted?  We probably didn't exist!
 			return {
