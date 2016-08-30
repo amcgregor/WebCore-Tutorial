@@ -1,5 +1,5 @@
-from datetime import datetime  # Python's standard date + time object.
-from pathlib import PurePosixPath  # An easy way to safely combine paths.
+# Python's standard date + time object.
+from datetime import datetime
 
 # HTTP status code exception for "302 Found" redirection.
 from webob.exc import HTTPFound
@@ -39,10 +39,7 @@ class Wiki:
 	def get(self):
 		"""Called to handle direct requests to the web root itself."""
 		
-		# Identify where this wiki is attached.
-		path = PurePosixPath(self._ctx.path[-1][1])
-		
-		return HTTPFound(location=str(path / 'Home'))  # Issue the redirect.
+		return HTTPFound(location=str(self._ctx.path.current / 'Home'))  # Issue the redirect.
 	
 	def post(self, name, content):
 		"""Save a new article to the database."""
