@@ -34,5 +34,30 @@ That's about it.  To follow the tutorial, `browse the commit history on GitHub`_
 Happy hacking!
 
 
+Embedding a Wiki in your own Application
+----------------------------------------
+
+As of commit `78ccad1`_ the example wiki implementation is relocatable to paths other than the root, and as of commit `e163ee4`_ the collection used to store articles is configurable. Being entirely reusable, now, you can embed a wiki in your own application very easily:
+
+.. code:: python
+
+   from web.app.wiki.root import Wiki
+   
+   class YourApplicationRoot:
+       wiki = Wiki
+
+This will attach a wiki to your application, accessible as ``/wiki``. If you wish to override the name of the collection used to store articles you can subclass ``Wiki`` and override the ``__collection__`` attribute:
+
+.. code:: python
+
+   from web.app.wiki.root import Wiki
+   
+   class YourApplicationRoot:
+       class wiki(Wiki):
+           __collection__ = 'articles'
+
 .. _browse the commit history on GitHub: https://github.com/amcgregor/WebCore-Tutorial/commits/wiki
+
+.. _78ccad1: https://github.com/amcgregor/WebCore-Tutorial/commit/78ccad1ffbbf84295d74b151534eb9f9383c5bc5
+.. _e163ee4: https://github.com/amcgregor/WebCore-Tutorial/commit/e163ee44a3256eed906bbe4b7109a8f8c1c074f0
 
