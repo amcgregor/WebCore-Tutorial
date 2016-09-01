@@ -47,7 +47,7 @@ setup(
 			],
 		
 		install_requires = [
-				'WebCore>=2.0,<3',
+				'WebCore>=2.0,<3',  # The underlying web framework.
 				'marrow.mongo',  # Database connectivity.
 				'web.dispatch.object',  # Object (class-based filesystem-like) dispatch.
 				'web.dispatch.resource',  # Resource (RESTful) dispatch.
