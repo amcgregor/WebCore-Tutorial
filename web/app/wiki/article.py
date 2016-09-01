@@ -1,3 +1,6 @@
+from .template import render
+
+
 class Article:
 	"""A wiki article."""
 	
@@ -9,7 +12,15 @@ class Article:
 		self._page = page  # The data associated with the page we represent.
 	
 	def get(self):
-		return self._page
+		"""Retrieve the article data or render an HTML page containing the article."""
+		
+		candidates = ['text/html'] + list(self._ctx.serializer)
+		match = self._ctx.request.accept.best_match(candidates, default_match='text/html')
+		
+		if match == 'text/html':
+			return render(self._ctx, self, self._page)  # Render an HTML page for the content.
+		
+		return self._page  # Let the serialization extension handle this for us.
 	
 	def post(self, content):
 		"""Update the in-database content for the current article.

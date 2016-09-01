@@ -1,3 +1,6 @@
+# Enable the use of cinje templates.
+__import__('cinje')  # Doing it this way prevents an "imported but unused" warning.
+
 # Get a reference to the Application class.
 from web.core import Application
 
