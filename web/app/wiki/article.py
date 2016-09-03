@@ -1,4 +1,5 @@
 from .template import render
+from .model import WikiArticle as D
 
 
 class Article:
@@ -28,15 +29,11 @@ class Article:
 		This will create the article if one by this name doesn't already exist.
 		"""
 		
-		result = self._ctx.db[self._wiki.__collection__].update_one(
-				{'_id': self._page['_id']},  # A query identifying the document to update.
+		result = self._wiki.__collection__.update_one(
+				D.name == self._page.name,  # A query identifying the document to update.
 				{  # The following are the MongoDB update operations to apply to the document.
-					'$set': {  # Update the page content.
-							'content': content,
-						},
-					'$currentDate': {  # Also update the last-modified time.
-							'modified': True,
-						}
+					'$set': {'content': content},  # Update the page content.
+					'$currentDate': {'modified': True}  # Also update the last-modified time.
 				}
 			)
 		
@@ -52,7 +49,7 @@ class Article:
 	def delete(self):
 		"""Delete this page from the wiki."""
 		
-		result = self._ctx.db[self._wiki.__collection__].delete_one({'_id': self._page['_id']})
+		result = self._wiki.__collection__.delete_one(D.name == self._page.name)
 		
 		if not result.deleted_count:  # Nothing was deleted?  We probably didn't exist!
 			return {

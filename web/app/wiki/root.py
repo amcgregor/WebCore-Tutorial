@@ -7,8 +7,9 @@ from webob.exc import HTTPFound
 # MongoDB exceptions that may be raised when manipulating data.
 from pymongo.errors import DuplicateKeyError
 
-# Get a reference to our Article resource class.
+# Get a reference to our Article resource class and data model.
 from .article import Article
+from .model import WikiArticle as D  # Shortened due to to repeated use.
 
 
 class Wiki:
@@ -21,18 +22,17 @@ class Wiki:
 	def __init__(self, context, collection=None, record=None):
 		"""Executed when the root of the site (or children) are accessed, on each request."""
 		self._ctx = context  # Store the "request context" for later use.
+		self.__collection__ = context.db[self.__collection__]  # Get a reference to the collection we use.
 	
 	def __getitem__(self, name):
 		"""Load data for the Article with the given name."""
 		
-		data = self._ctx.db[self.__collection__].find_one({'_id': name})
+		data = self.__collection__.find_one(D.name == name)
 		
 		if not data:  # If no record was found, populate some default data.
-			data = {
-					'_id': name,
-					'content': None,
-					'modified': None,
-				}
+			data = D(name)
+		else:
+			data = D.from_mongo(data)  # Otherwise, wrap in our model object.
 		
 		return data
 	
@@ -45,11 +45,7 @@ class Wiki:
 		"""Save a new article to the database."""
 		
 		try:
-			result = self._ctx.db[self.__collection__].insert_one({
-					'_id': name,
-					'content': content,
-					'modified': datetime.utcnow(),
-				})
+			result = self.__collection__.insert_one(D(name, content))
 		
 		except DuplicateKeyError:
 			return {

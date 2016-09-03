@@ -2,8 +2,8 @@
 
 : from cinje.std.html import page
 
-: def render context, article, page
-: using page page['_id']
+: def render context, article, doc
+: using page doc.name
 : classes = {'wiki'}
 
 : if not page['content']
@@ -11,6 +11,6 @@
 : end
 
 <article&{class_=classes}>
-	#{page['content'] or "<i>No content.</i>"}
+	#{doc.content or "<i>No content.</i>"}
 </article>
 
