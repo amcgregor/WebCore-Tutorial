@@ -11,6 +11,6 @@
 : end
 
 <article&{class_=classes}>
-	#{doc.content or "<i>No content.</i>"}
+	#{getattr(doc, 'content', "<i>No content.</i>")}
 </article>
 
