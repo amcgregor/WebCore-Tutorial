@@ -6,7 +6,7 @@
 : using page doc.name
 : classes = {'wiki'}
 
-: if not doc.content
+: if 'content' not in doc
 	: classes.add('placeholder')
 : end
 
