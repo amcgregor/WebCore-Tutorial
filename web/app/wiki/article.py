@@ -15,7 +15,7 @@ class Article:
 	def get(self):
 		"""Retrieve the article data or render an HTML page containing the article."""
 		
-		candidates = ['text/html'] + list(self._ctx.serializer)
+		candidates = ['text/html'] + list(self._ctx.serialize.types)
 		match = self._ctx.request.accept.best_match(candidates, default_match='text/html')
 		
 		if match == 'text/html':
