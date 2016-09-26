@@ -47,11 +47,12 @@ setup(
 			],
 		
 		install_requires = [
-				'WebCore>=2.0,<3',  # The underlying web framework.
-				'marrow.mongo',  # Database connectivity.
-				'web.dispatch.object',  # Object (class-based filesystem-like) dispatch.
-				'web.dispatch.resource',  # Resource (RESTful) dispatch.
-				'cinje',  # Template engine.
+				'WebCore>=2.0.3,<3',  # The underlying web framework.
+				'web.db',  # Database connectivity layer for WebCore.
+				'marrow.mongo',  # Database connectivity and schema + query system for MongoDB.
+				'web.dispatch.object',  # Object (class-based filesystem-like) dispatch for endpoint discovery.
+				'web.dispatch.resource',  # Resource (based on REQUEST_METHOD) dispatch for endpoint discovery.
+				'cinje',  # Template engine, an importable Python domain-specific code transformer / language.
 			],
 		
 		extras_require = dict(
