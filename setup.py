@@ -2,49 +2,78 @@
 # encoding: utf-8
 
 import os
+import sys
+import codecs
 
 from setuptools import setup, find_packages
 
 
+# Used to load the `README.rst` file from disk later.
 here = os.path.abspath(os.path.dirname(__file__))
+
+tests_require = [  # We require these packages when running tests.
+		'pytest-runner',
+		'coverage',
+		'pytest',
+		'pytest-cov',
+		'pytest-flakes',
+		'pytest-capturelog',
+	]
 
 
 setup(
-		name = "WebCore-Wiki-Tutorial",
-		version = "0.1",
+		name = "web.app.wiki",
+		version = "1.0",
 		
-		description = "An example Wiki application for WebCore.",
-		long_description = "",
-		url = "https://github.com/marrow/tutorial",
+		# Additional project metadata.
+		
+		description = "An example portable Wiki application and add-on for WebCore.",
+		long_description = codecs.open(os.path.join(here, 'README.rst'), 'r', 'utf8').read(),  # Load from file.
+		url = "https://github.com/marrow/tutorial/tree/wiki",  # Primary site address is on GitHub.
+		download_url = "https://github.com/marrow/tutorial/releases",  # Downloads are available here.
 		author = "Alice Bevan-McGregor",
 		author_email = "alice@gothcandy.com",
-		license = "mit",
-		keywords = [],
+		license = "MIT",
+		keywords = ['web.app', 'WebCore', 'marrow'],  # Make our package discoverable using keywords.
+		classifiers = [  # "Trove Classifiers", ref: https://pypi.python.org/pypi?%3Aaction=list_classifiersA
+				"Development Status :: 5 - Production/Stable",
+				"Environment :: Console",
+				"Environment :: Web Environment",
+				"Intended Audience :: Developers",
+				"License :: OSI Approved :: MIT License",
+				"Natural Language :: English",
+				"Operating System :: OS Independent",
+				"Programming Language :: Python",
+				"Programming Language :: Python :: 3",
+				"Programming Language :: Python :: 3 :: Only",
+				"Programming Language :: Python :: 3.3",
+				"Programming Language :: Python :: 3.4",
+				"Programming Language :: Python :: 3.5",
+				"Programming Language :: Python :: Implementation :: CPython",
+				"Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+				"Topic :: Software Development :: Libraries",
+				"Topic :: Software Development :: Libraries :: Python Modules",
+			],
 		
-		packages = find_packages(exclude=['test', 'example', 'conf', 'benchmark', 'tool', 'doc']),
-		include_package_data = True,
-		package_data = {'': [
+		# Code-related settings.
+		
+		packages = find_packages(exclude=['test']),  # Our test modules aren't installable.
+		include_package_data = True,  # Include additional files in the bundled package.
+		package_data = {'': [  # Include these files in bundled packages, like .egg files.
 				'README.rst',
 				'LICENSE.txt'
 			]},
 		
-		namespace_packages = [
+		namespace_packages = [  # We include our own package under `web.app`, also list parents.
 				'web',
 				'web.app',
 			],
 		
-		setup_requires = [
+		setup_requires = [  # Conditionally include the test runner if asked to run tests.
 				'pytest-runner',
-			],
+			] if {'pytest', 'test', 'ptr'}.intersection(sys.argv) else [],
 		
-		tests_require = [
-				'pytest-runner',
-				'coverage',
-				'pytest',
-				'pytest-cov',
-				'pytest-spec',
-				'pytest-flakes',
-			],
+		tests_require = tests_require,  # Include our test helper packages.
 		
 		install_requires = [
 				'WebCore>=2.0.3,<3',  # The underlying web framework.
@@ -56,16 +85,9 @@ setup(
 			],
 		
 		extras_require = dict(
-				development = [
-						'pytest-runner',
-						'coverage',
-						'pytest',
-						'pytest-cov',
-						'pytest-spec',
-						'pytest-flakes',
-					],
+				development = tests_require,  # Also include our test helper packages, in development.
 			),
 		
-		entry_points = {
+		entry_points = {  # Plugins we define.
 				}
 	)
