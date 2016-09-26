@@ -12,12 +12,11 @@ from setuptools import setup, find_packages
 here = os.path.abspath(os.path.dirname(__file__))
 
 tests_require = [  # We require these packages when running tests.
-		'pytest-runner',
-		'coverage',
-		'pytest',
-		'pytest-cov',
-		'pytest-flakes',
-		'pytest-capturelog',
+		'coverage',  # Capture code execution coverage.
+		'pytest',  # The main test runner.
+		'pytest-cov',  # Coverage reporting integration.
+		'pytest-flakes',  # Code linting integration.
+		'pytest-capturelog',  # Python logging capture, for display with test failures.
 	]
 
 
