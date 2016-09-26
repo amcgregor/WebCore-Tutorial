@@ -8,7 +8,7 @@ from web.core import Application
 from web.ext.annotation import AnnotationExtension
 from web.ext.debug import DebugExtension
 from web.ext.serialize import SerializationExtension
-from web.ext.db import DBExtension
+from web.ext.db import DatabaseExtension
 
 # Get a reference to our database connection adapter.
 from web.db.mongo import MongoDBConnection
@@ -22,7 +22,7 @@ app = Application(Wiki, extensions=[
 		AnnotationExtension(),
 		DebugExtension(),
 		SerializationExtension(),
-		DBExtension(MongoDBConnection("mongodb://localhost/test")),
+		DatabaseExtension(MongoDBConnection("mongodb://localhost/test")),
 	])
 
 
