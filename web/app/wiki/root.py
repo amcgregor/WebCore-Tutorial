@@ -17,20 +17,23 @@ class Wiki:
 	
 	__dispatch__ = 'resource'  # The Wiki is a collection of pages, so use resource dispatch.
 	__resource__ = Article  # Declare the type of resource we contain.
-	__collection__ = 'articles'
+	__collection__ = 'articles'  # The default collection name to use when bound.
+	__home__ = 'Home'  # The default homepage users are directed to if requesting the root.
 	
 	def __init__(self, context, collection=None, record=None):
 		"""Executed when the root of the site (or children) are accessed, on each request."""
+		
 		self._ctx = context  # Store the "request context" for later use.
 		self.__collection__ = context.db[self.__collection__]  # Get a reference to the collection we use.
 	
 	def __getitem__(self, name):
 		"""Load data for the Article with the given name."""
 		
+		# Attempt to locate a document by that name.
 		data = self.__collection__.find_one(D.name == name)
 		
 		if not data:  # If no record was found, populate some default data.
-			data = D(name)
+			data = D(name)  # Creation and modification times are constructed for us.
 		else:
 			data = D.from_mongo(data)  # Otherwise, wrap in our model object.
 		
@@ -39,12 +42,14 @@ class Wiki:
 	def get(self):
 		"""Called to handle direct requests to the web root itself."""
 		
-		return HTTPFound(location=str(self._ctx.path.current / 'Home'))  # Issue the redirect.
+		# Redirect users to the default home page.
+		return HTTPFound(location=str(self._ctx.path.current / self.__home__))
 	
 	def post(self, name, content):
 		"""Save a new article to the database."""
 		
 		try:
+			# Insert an article with the given name and content.
 			result = self.__collection__.insert_one(D(name, content))
 		
 		except DuplicateKeyError:
