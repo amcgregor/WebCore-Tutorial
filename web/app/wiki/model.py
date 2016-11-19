@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from marrow.mongo.core import Document
-from marrow.mongo import String, Date
+from marrow.mongo import Document
+from marrow.mongo.field import String, Date
 
 
 class WikiArticle(Document):
@@ -21,4 +21,3 @@ class WikiArticle(Document):
 				created = self.created.isoformat(),
 				modified = self.modified.isoformat(),
 			)
-
